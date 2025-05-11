@@ -10,18 +10,30 @@ function updateConnectionStatus(isOnline) {
   }
 }
 
+// Function to check internet connection
+function checkInternetConnection() {
+  // Try to fetch a small file or make a HEAD request to a reliable server
+  fetch('https://www.google.com/favicon.ico', { 
+    mode: 'no-cors',
+    cache: 'no-cache'
+  })
+    .then(() => {
+      updateConnectionStatus(true);
+    })
+    .catch(() => {
+      updateConnectionStatus(false);
+    });
+}
+
 // Create a real-time connection monitor
 function createConnectionMonitor() {
-  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  // Initial check
+  checkInternetConnection();
   
-  if (connection) {
-    // Monitor connection changes
-    connection.addEventListener('change', () => {
-      updateConnectionStatus(navigator.onLine);
-    });
-  }
-
-  // Monitor online/offline events
+  // Check every 5 seconds
+  setInterval(checkInternetConnection, 2000);
+  
+  // Also keep the event listeners for immediate feedback
   window.addEventListener('online', () => {
     updateConnectionStatus(true);
   });
@@ -29,9 +41,6 @@ function createConnectionMonitor() {
   window.addEventListener('offline', () => {
     updateConnectionStatus(false);
   });
-
-  // Initial status
-  updateConnectionStatus(navigator.onLine);
 }
 
 // Start monitoring
