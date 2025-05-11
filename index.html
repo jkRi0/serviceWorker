@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Offline Website</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Hello, this website works offline!</h1>
+  <p>Try disconnecting your internet and reloading the page.</p>
+
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker Registered'));
+    }
+  </script>
+</body>
+</html>
